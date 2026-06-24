@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 baxyz
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
 import { MAGIC, MAGIC_SIZE, HEADER_SIZE } from "./magic";
 
 function lz4BlockDecode(src: Uint8Array, dst: Uint8Array): number {
