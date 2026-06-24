@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 import { decodeMozLz4, encodeMozLz4 } from "../src/index";
 
@@ -59,5 +60,32 @@ describe("decodeMozLz4", () => {
     const tampered = encoded.slice();
     new DataView(tampered.buffer).setUint32(8, 10, true); // claim 10 bytes, only 5 decode
     expect(() => decodeMozLz4(tampered)).toThrow("Not a mozlz4 file");
+  });
+
+  it("decodes when input has non-zero byteOffset (subarray of a larger buffer)", () => {
+    // Validates data.byteOffset + MAGIC.length in the DataView constructor
+    const original = new TextEncoder().encode("hello mozlz4 byteOffset test");
+    const encoded = encodeMozLz4(original);
+    const padded = new Uint8Array(4 + encoded.length);
+    padded.set(encoded, 4);
+    const slice = padded.subarray(4); // byteOffset=4, same underlying ArrayBuffer
+    expect(decodeMozLz4(slice)).toEqual(original);
+  });
+
+  it("decodes a pre-encoded fixture (Firefox sessionstore structure)", () => {
+    // Binary fixture generated from a realistic 3-tab sessionstore JSON.
+    // Validates decoder against a committed binary rather than always round-tripping
+    // through our own encoder.
+    const fixture = new Uint8Array(
+      readFileSync(new URL("./fixtures/sessionstore.jsonlz4", import.meta.url)),
+    );
+    const decoded = decodeMozLz4(fixture);
+    const parsed = JSON.parse(new TextDecoder().decode(decoded)) as {
+      windows: [{ tabs: { entries: { url: string }[] }[] }];
+    };
+    expect(parsed.windows[0].tabs).toHaveLength(3);
+    expect(parsed.windows[0].tabs[0].entries[0].url).toBe("https://example.com");
+    expect(parsed.windows[0].tabs[1].entries[0].url).toBe("https://github.com");
+    expect(parsed.windows[0].tabs[2].entries[0].url).toBe("https://www.npmjs.com/package/mozlz4");
   });
 });

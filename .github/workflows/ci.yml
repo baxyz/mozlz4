@@ -75,11 +75,30 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
+  bench:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm bench 2>&1 | tee bench-results.txt
+      - name: Upload bench results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results
+          path: bench-results.txt
+
   pr-summary:
     name: PR Summary
     runs-on: ubuntu-latest
     if: ${{ always() && github.event_name == 'pull_request' }}
-    needs: [lint, format, typecheck, test, build]
+    needs: [lint, format, typecheck, test, build, bench]
     permissions:
       pull-requests: write
     steps:
@@ -93,6 +112,7 @@ jobs:
               typecheck: '${{ needs.typecheck.result }}',
               test:      '${{ needs.test.result }}',
               build:     '${{ needs.build.result }}',
+              bench:     '${{ needs.bench.result }}',
             }
             const icon = (r) => r === 'success' ? '✅' : r === 'failure' ? '❌' : r === 'skipped' ? '⏭️' : '⚠️'
             const rows = Object.entries(results)
