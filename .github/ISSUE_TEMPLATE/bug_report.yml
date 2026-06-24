@@ -1,0 +1,45 @@
+name: Bug report
+description: Something isn't working as expected
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened? What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        ```ts
+        import { decodeMozLz4 } from 'mozlz4'
+        // minimal repro
+        ```
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: mozlz4 version
+      placeholder: "e.g. 0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime / environment
+      placeholder: "e.g. Node 22, Firefox extension, Deno 2.x, browser"
+    validations:
+      required: true
+
+  - type: textarea
+    id: source-file
+    attributes:
+      label: Source .jsonlz4 / .mozlz4 file (optional)
+      description: If the bug is triggered by a specific Firefox file, attach or describe it here.

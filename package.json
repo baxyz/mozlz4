@@ -1,0 +1,73 @@
+{
+  "name": "mozlz4",
+  "version": "0.1.0",
+  "description": "Encode and decode Mozilla's mozLz40 format — the LZ4 variant used by Firefox and Zen Browser",
+  "keywords": [
+    "mozlz4",
+    "lz4",
+    "firefox",
+    "mozilla",
+    "zen",
+    "compression",
+    "decode",
+    "encode",
+    "jsonlz4"
+  ],
+  "homepage": "https://github.com/baxyz/mozlz4#readme",
+  "bugs": {
+    "url": "https://github.com/baxyz/mozlz4/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baxyz/mozlz4.git"
+  },
+  "license": "MIT",
+  "author": "baxyz <berenger@arnaud.work>",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/mozlz4.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/mozlz4.cjs"
+      }
+    }
+  },
+  "main": "./dist/mozlz4.cjs",
+  "module": "./dist/mozlz4.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "vite build && tsc --project tsconfig.build.json --declaration --emitDeclarationOnly",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src test",
+    "format": "oxfmt src test",
+    "format:check": "oxfmt --check src test",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "prepublishOnly": "pnpm build"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/ui": "^4.1.5",
+    "oxfmt": "^0.48.0",
+    "oxlint": "^1.63.0",
+    "typescript": "7.0.1-rc",
+    "vite": "^8.0.11",
+"vitest": "^4.1.5"
+  },
+  "packageManager": "pnpm@11.8.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
