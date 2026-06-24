@@ -2,8 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/mozlz4)](https://www.npmjs.com/package/mozlz4)
 [![CI](https://github.com/baxyz/mozlz4/actions/workflows/ci.yml/badge.svg)](https://github.com/baxyz/mozlz4/actions/workflows/ci.yml)
-[![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)](#)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)
+[![license: LGPL-3.0-or-later](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue)](LICENSE)
 
 Encode and decode Mozilla's **`mozLz40`** format — the LZ4-compressed binary format used by Firefox, Zen Browser, and other Mozilla-based browsers for profile files such as `sessionstore.jsonlz4`, `zen-sessions.jsonlz4`, `bookmarks.jsonlz4`, and other `.jsonlz4` / `.mozlz4` files.
 
@@ -57,7 +57,7 @@ Encodes a raw buffer using the mozlz4 format: `mozLz40\0` magic + uint32LE size 
 ## File format
 
 | Offset | Size | Content |
-|--------|------|---------|
+| ------ | ---- | ------- |
 | 0 | 8 | Magic: `mozLz40\0` (bytes `6d 6f 7a 4c 7a 34 30 00`) |
 | 8 | 4 | Uncompressed size (uint32, little-endian) |
 | 12 | n | LZ4 block-compressed data |
@@ -65,7 +65,7 @@ Encodes a raw buffer using the mozlz4 format: `mozLz40\0` magic + uint32LE size 
 ## Common Firefox files
 
 | File | Description |
-|------|-------------|
+| ---- | ----------- |
 | `sessionstore.jsonlz4` | Open tabs and windows |
 | `bookmarks.jsonlz4` | Bookmark backups |
 | `zen-sessions.jsonlz4` | Zen Browser workspaces |
@@ -77,4 +77,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE) © [baxyz](https://github.com/baxyz)
+[LGPL-3.0-or-later](LICENSE) © [baxyz](https://github.com/baxyz)

@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/baxyz/mozlz4.git"
   },
-  "license": "MIT",
+  "license": "LGPL-3.0-or-later",
   "author": "baxyz <berenger@arnaud.work>",
   "type": "module",
   "exports": {
