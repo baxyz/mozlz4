@@ -48,7 +48,7 @@ writeFileSync('sessionstore.jsonlz4', encodeMozLz4(new TextEncoder().encode(modi
 
 Decodes a mozlz4-encoded buffer and returns the raw uncompressed bytes.
 
-Throws `Error('Not a mozlz4 file')` if the `mozLz40\0` magic header is absent.
+Throws `Error('Not a mozlz4 file')` if the buffer is too short, the `mozLz40\0` magic header is absent, or the decompressed size doesn't match the header.
 
 ### `encodeMozLz4(data: Uint8Array): Uint8Array`
 

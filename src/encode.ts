@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-import { MAGIC, MAGIC_SIZE, HEADER_SIZE } from "./magic";
+import { MAGIC, HEADER_SIZE } from "./magic";
 
 const HASH_BITS = 16;
 const HASH_SIZE = 1 << HASH_BITS;
@@ -17,6 +17,16 @@ const LAST_LITERALS = 5;
 function hashSeq(src: Uint8Array, pos: number): number {
   const v = src[pos] | (src[pos + 1] << 8) | (src[pos + 2] << 16) | (src[pos + 3] << 24);
   return (Math.imul(v, HASH_MUL) >>> (32 - HASH_BITS)) & (HASH_SIZE - 1);
+}
+
+function writeExtraLen(dst: Uint8Array, d: number, len: number): number {
+  let rem = len - 15;
+  while (rem >= 255) {
+    dst[d++] = 255;
+    rem -= 255;
+  }
+  dst[d++] = rem;
+  return d;
 }
 
 function lz4BlockEncode(src: Uint8Array): Uint8Array {
@@ -56,14 +66,7 @@ function lz4BlockEncode(src: Uint8Array): Uint8Array {
       const tokenPos = d++;
       dst[tokenPos] = (Math.min(litLen, 15) << 4) | Math.min(ml, 15);
 
-      if (litLen >= 15) {
-        let rem = litLen - 15;
-        while (rem >= 255) {
-          dst[d++] = 255;
-          rem -= 255;
-        }
-        dst[d++] = rem;
-      }
+      if (litLen >= 15) d = writeExtraLen(dst, d, litLen);
 
       dst.set(src.subarray(litStart, s), d);
       d += litLen;
@@ -71,14 +74,7 @@ function lz4BlockEncode(src: Uint8Array): Uint8Array {
       dst[d++] = offset & 0xff;
       dst[d++] = (offset >>> 8) & 0xff;
 
-      if (ml >= 15) {
-        let rem = ml - 15;
-        while (rem >= 255) {
-          dst[d++] = 255;
-          rem -= 255;
-        }
-        dst[d++] = rem;
-      }
+      if (ml >= 15) d = writeExtraLen(dst, d, ml);
 
       s += matchLen;
       litStart = s;
@@ -92,14 +88,7 @@ function lz4BlockEncode(src: Uint8Array): Uint8Array {
   const tokenPos = d++;
   dst[tokenPos] = Math.min(litLen, 15) << 4;
 
-  if (litLen >= 15) {
-    let rem = litLen - 15;
-    while (rem >= 255) {
-      dst[d++] = 255;
-      rem -= 255;
-    }
-    dst[d++] = rem;
-  }
+  if (litLen >= 15) d = writeExtraLen(dst, d, litLen);
 
   dst.set(src.subarray(litStart), d);
   d += litLen;
@@ -112,7 +101,7 @@ export function encodeMozLz4(data: Uint8Array): Uint8Array {
   const compressed = lz4BlockEncode(data);
   const out = new Uint8Array(HEADER_SIZE + compressed.length);
   out.set(MAGIC, 0);
-  new DataView(out.buffer).setUint32(MAGIC_SIZE, data.length, true);
+  new DataView(out.buffer, out.byteOffset).setUint32(MAGIC.length, data.length, true);
   out.set(compressed, HEADER_SIZE);
   return out;
 }

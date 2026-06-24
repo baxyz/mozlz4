@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-import { MAGIC, MAGIC_SIZE, HEADER_SIZE } from "./magic";
+import { MAGIC, HEADER_SIZE } from "./magic";
 
 function lz4BlockDecode(src: Uint8Array, dst: Uint8Array): number {
   let s = 0;
@@ -47,14 +47,16 @@ function lz4BlockDecode(src: Uint8Array, dst: Uint8Array): number {
 
 /**
  * Decodes a mozlz4-encoded buffer.
- * @throws {Error} if the magic bytes don't match `mozLz40\0`
+ * @throws {Error} if the data is not a valid mozlz4 file
  */
 export function decodeMozLz4(data: Uint8Array): Uint8Array {
-  for (let i = 0; i < MAGIC_SIZE; i++) {
+  if (data.length < HEADER_SIZE) throw new Error("Not a mozlz4 file");
+  for (let i = 0; i < MAGIC.length; i++) {
     if (data[i] !== MAGIC[i]) throw new Error("Not a mozlz4 file");
   }
-  const size = new DataView(data.buffer, data.byteOffset + MAGIC_SIZE, 4).getUint32(0, true);
+  const size = new DataView(data.buffer, data.byteOffset + MAGIC.length, 4).getUint32(0, true);
   const out = new Uint8Array(size);
   const written = lz4BlockDecode(data.subarray(HEADER_SIZE), out);
-  return written < size ? out.subarray(0, written) : out;
+  if (written < size) throw new Error("Not a mozlz4 file");
+  return out;
 }

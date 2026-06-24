@@ -48,13 +48,16 @@ describe("decodeMozLz4", () => {
     expect(decodeMozLz4(encodeMozLz4(new Uint8Array([0xff])))).toBeInstanceOf(Uint8Array);
   });
 
-  it("returns subarray when written < declared size (tampered size field)", () => {
-    // Inflate the declared size so `written < size` and the ternary's true branch fires
+  it("throws when buffer is too short (< 12 bytes)", () => {
+    expect(() => decodeMozLz4(new Uint8Array(11))).toThrow("Not a mozlz4 file");
+  });
+
+  it("throws on size mismatch (tampered size field)", () => {
+    // Inflate the declared size so written < size → decompression mismatch
     const original = new Uint8Array([1, 2, 3, 4, 5]);
     const encoded = encodeMozLz4(original);
     const tampered = encoded.slice();
     new DataView(tampered.buffer).setUint32(8, 10, true); // claim 10 bytes, only 5 decode
-    const decoded = decodeMozLz4(tampered);
-    expect(decoded).toEqual(original);
+    expect(() => decodeMozLz4(tampered)).toThrow("Not a mozlz4 file");
   });
 });
