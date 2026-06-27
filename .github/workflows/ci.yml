@@ -74,6 +74,27 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - name: Verify dist/package.json
+        run: |
+          node -e "
+          import { readFileSync, existsSync } from 'node:fs'
+
+          const pkg = JSON.parse(readFileSync('dist/package.json', 'utf8'))
+
+          const forbidden = ['devDependencies', 'scripts', 'packageManager', 'files', 'dependencies']
+          for (const field of forbidden) {
+            if (field in pkg) throw new Error(\`dist/package.json must not contain '\${field}'\`)
+          }
+
+          const paths = JSON.stringify(pkg.exports) + pkg.main + pkg.module + pkg.types
+          if (paths.includes('./dist/')) throw new Error('dist/package.json still has ./dist/ prefix in paths')
+
+          for (const file of ['README.md', 'LICENSE']) {
+            if (!existsSync(\`dist/\${file}\`)) throw new Error(\`dist/\${file} is missing\`)
+          }
+
+          console.log('dist/package.json OK — no forbidden fields, paths clean, assets present')
+          " --input-type=module
 
   bench:
     name: Benchmark
