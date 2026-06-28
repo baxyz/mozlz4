@@ -39,14 +39,9 @@
   "main": "./dist/mozlz4.cjs",
   "module": "./dist/mozlz4.mjs",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
   "sideEffects": false,
   "scripts": {
-    "build": "vite build && tsc --project tsconfig.build.json --declaration --emitDeclarationOnly && tsx scripts/pack.ts",
+    "build": "vite build && tsc --project tsconfig.build.json --declaration --emitDeclarationOnly && node scripts/pack.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint src test bench",
     "format": "oxfmt src test bench",
@@ -63,7 +58,6 @@
     "@vitest/ui": "^4.1.5",
     "oxfmt": "^0.48.0",
     "oxlint": "^1.63.0",
-    "tsx": "^4.22.4",
     "typescript": "7.0.1-rc",
     "vite": "^8.0.11",
     "vitest": "^4.1.5"
