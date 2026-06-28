@@ -81,7 +81,7 @@ jobs:
 
           const pkg = JSON.parse(readFileSync('dist/package.json', 'utf8'))
 
-          const forbidden = ['devDependencies', 'scripts', 'packageManager', 'files', 'dependencies']
+          const forbidden = ['devDependencies', 'scripts', 'packageManager', 'files', 'publishConfig']
           for (const field of forbidden) {
             if (field in pkg) throw new Error(\`dist/package.json must not contain '\${field}'\`)
           }
