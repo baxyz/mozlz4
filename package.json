@@ -56,7 +56,7 @@
     "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^4.1.5",
     "@vitest/ui": "^4.1.5",
-    "oxfmt": "^0.48.0",
+    "oxfmt": "^0.58.0",
     "oxlint": "^1.63.0",
     "typescript": "7.0.1-rc",
     "vite": "^8.0.11",
