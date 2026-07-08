@@ -62,6 +62,16 @@ describe("decodeMozLz4", () => {
     expect(() => decodeMozLz4(tampered)).toThrow("Not a mozlz4 file");
   });
 
+  it("throws instead of allocating when the declared size exceeds the safety cap", () => {
+    // A corrupted/truncated file could have any 4 bytes here — must reject
+    // before `new Uint8Array(size)` ever runs, not after attempting it.
+    const original = new Uint8Array([1, 2, 3, 4, 5]);
+    const encoded = encodeMozLz4(original);
+    const tampered = encoded.slice();
+    new DataView(tampered.buffer).setUint32(8, 0xffffffff, true);
+    expect(() => decodeMozLz4(tampered)).toThrow("Not a mozlz4 file");
+  });
+
   it("decodes when input has non-zero byteOffset (subarray of a larger buffer)", () => {
     // Validates data.byteOffset + MAGIC.length in the DataView constructor
     const original = new TextEncoder().encode("hello mozlz4 byteOffset test");
