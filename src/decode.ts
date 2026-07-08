@@ -5,6 +5,11 @@
 
 import { MAGIC, HEADER_SIZE } from "./magic";
 
+// Generous bound for real mozlz4 payloads (Firefox/Zen session, bookmarks,
+// search-config files) — guards against a corrupted or truncated 4-byte size
+// field forcing a multi-gigabyte allocation before any content is validated.
+const MAX_DECODED_SIZE = 1024 * 1024 * 1024; // 1 GiB
+
 function lz4BlockDecode(src: Uint8Array, dst: Uint8Array): number {
   let s = 0;
   let d = 0;
@@ -55,6 +60,7 @@ export function decodeMozLz4(data: Uint8Array): Uint8Array {
     if (data[i] !== MAGIC[i]) throw new Error("Not a mozlz4 file");
   }
   const size = new DataView(data.buffer, data.byteOffset + MAGIC.length, 4).getUint32(0, true);
+  if (size > MAX_DECODED_SIZE) throw new Error("Not a mozlz4 file");
   const out = new Uint8Array(size);
   const written = lz4BlockDecode(data.subarray(HEADER_SIZE), out);
   if (written < size) throw new Error("Not a mozlz4 file");
