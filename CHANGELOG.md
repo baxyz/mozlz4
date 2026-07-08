@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-07-08
+
+### Fixed
+
+- `decodeMozLz4` now rejects a declared decompressed size over 1 GiB before allocating, instead of trusting the untrusted 4-byte size field straight from the file
+
+## [0.2.1] — 2026-06-28
+
+### Changed
+
+- Internal build tooling only: migrated the pack script from `pack.ts` to `pack.mjs`, dropped `tsx`, removed `DOM` from the tsconfig `lib`, and fixed the forbidden-fields check for `dist/package.json`
+
 ## [0.2.0] — 2026-06-27
 
 ### Changed
@@ -22,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dual ESM + CJS build with TypeScript declarations
 - 100% code coverage
 
-[unreleased]: https://github.com/baxyz/mozlz4/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/baxyz/mozlz4/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/baxyz/mozlz4/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/baxyz/mozlz4/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/baxyz/mozlz4/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/baxyz/mozlz4/releases/tag/v0.1.0
