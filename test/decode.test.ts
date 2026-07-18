@@ -72,6 +72,17 @@ describe("decodeMozLz4", () => {
     expect(() => decodeMozLz4(tampered)).toThrow("Not a mozlz4 file");
   });
 
+  it("throws a clean error instead of leaking a raw RangeError on corrupted literal length", () => {
+    // Declared size too small for the literal run the token encodes — the
+    // internal dst.set() overflow must surface as our own error, not a raw
+    // RangeError from the underlying TypedArray.
+    const buf = Uint8Array.from({ length: 20 }, (_, i) => i + 1);
+    const encoded = encodeMozLz4(buf);
+    const tampered = encoded.slice();
+    new DataView(tampered.buffer).setUint32(8, 3, true); // way smaller than the 20-byte literal run
+    expect(() => decodeMozLz4(tampered)).toThrow("Not a mozlz4 file");
+  });
+
   it("decodes when input has non-zero byteOffset (subarray of a larger buffer)", () => {
     // Validates data.byteOffset + MAGIC.length in the DataView constructor
     const original = new TextEncoder().encode("hello mozlz4 byteOffset test");

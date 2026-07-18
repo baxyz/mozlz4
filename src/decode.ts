@@ -62,7 +62,12 @@ export function decodeMozLz4(data: Uint8Array): Uint8Array {
   const size = new DataView(data.buffer, data.byteOffset + MAGIC.length, 4).getUint32(0, true);
   if (size > MAX_DECODED_SIZE) throw new Error("Not a mozlz4 file");
   const out = new Uint8Array(size);
-  const written = lz4BlockDecode(data.subarray(HEADER_SIZE), out);
-  if (written < size) throw new Error("Not a mozlz4 file");
+  let written: number;
+  try {
+    written = lz4BlockDecode(data.subarray(HEADER_SIZE), out);
+  } catch {
+    throw new Error("Not a mozlz4 file");
+  }
+  if (written !== size) throw new Error("Not a mozlz4 file");
   return out;
 }
