@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] — 2026-07-19
+
+### Fixed
+
+- `decodeMozLz4` now rejects a decoded size that doesn't exactly match the declared size (was only checking for undersized output), and wraps internal LZ4 block-decoding failures in a clean `"Not a mozlz4 file"` error instead of letting a raw `RangeError` leak out on corrupted input
+
 ## [0.2.2] — 2026-07-08
 
 ### Fixed
@@ -34,7 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dual ESM + CJS build with TypeScript declarations
 - 100% code coverage
 
-[unreleased]: https://github.com/baxyz/mozlz4/compare/v0.2.2...HEAD
+[unreleased]: https://github.com/baxyz/mozlz4/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/baxyz/mozlz4/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/baxyz/mozlz4/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/baxyz/mozlz4/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/baxyz/mozlz4/compare/v0.1.0...v0.2.0
