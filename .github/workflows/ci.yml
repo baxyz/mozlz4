@@ -89,7 +89,7 @@ jobs:
           const paths = JSON.stringify(pkg.exports) + pkg.main + pkg.module + pkg.types
           if (paths.includes('./dist/')) throw new Error('dist/package.json still has ./dist/ prefix in paths')
 
-          for (const file of ['README.md', 'LICENSE']) {
+          for (const file of ['README.md', 'LICENSE', 'CHANGELOG.md']) {
             if (!existsSync(\`dist/\${file}\`)) throw new Error(\`dist/\${file} is missing\`)
           }
 
