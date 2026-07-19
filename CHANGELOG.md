@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.4] — 2026-07-19
+
+### Changed
+
+- The published npm package now includes `CHANGELOG.md` alongside `LICENSE` and `README.md`
+
 ## [0.2.3] — 2026-07-19
 
 ### Fixed
@@ -40,7 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dual ESM + CJS build with TypeScript declarations
 - 100% code coverage
 
-[unreleased]: https://github.com/baxyz/mozlz4/compare/v0.2.3...HEAD
+[unreleased]: https://github.com/baxyz/mozlz4/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/baxyz/mozlz4/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/baxyz/mozlz4/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/baxyz/mozlz4/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/baxyz/mozlz4/compare/v0.2.0...v0.2.1
