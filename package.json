@@ -1,6 +1,6 @@
 {
   "name": "mozlz4",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Encode and decode Mozilla's mozLz40 format — the LZ4 variant used by Firefox and Zen Browser",
   "keywords": [
     "mozlz4",
