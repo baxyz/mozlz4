@@ -1,0 +1,4 @@
+{
+  "conventionalCommits.gitmoji": true,
+  "conventionalCommits.scopes": ["core", "build", "test", "bench", "docs", "deps", "ci"]
+}
