@@ -61,10 +61,17 @@ test/
 
 ## Releasing (maintainers)
 
-1. Update `CHANGELOG.md`: move `## [Unreleased]` entries to a new `## [x.y.z] — YYYY-MM-DD` section.
-2. Bump `"version"` in `package.json`.
-3. Commit: `git commit -m "chore: release vx.y.z"`.
-4. Tag: `git tag vx.y.z && git push --follow-tags`.
-5. The [Release workflow](.github/workflows/release.yml) publishes to npm automatically.
+Run *Actions → Release → Run workflow* on `main` (tick `dry-run` first if in doubt). After the
+checks of [CI](.github/workflows/ci.yml), [helpers4/action-release](https://github.com/helpers4/action-release)
+computes the version from the Conventional Commits (`bump`: `auto`, or a forced level), writes it in
+`package.json` and `jsr.json`, adds the section of the version to `CHANGELOG.md`, builds, dry-runs
+the npm and JSR publications, pushes the signed release commit to `main`, tags it, publishes to npm
+and JSR with trusted publishing (no token) and publishes the GitHub release.
 
-> **Note:** `NPM_TOKEN` must be set as a repository secret for publishing to work.
+- Do not bump `version` or push a `v*` tag by hand.
+- A summary written under `## [Unreleased]` in `CHANGELOG.md` leads the section of the version and
+  the release notes, above the list generated from the commits.
+- If a registry step fails after the tag exists, fix the cause and *Re-run failed jobs* (or run
+  **Release** with `bump: resume`). Never delete the tag.
+- `release.yml` must keep its file name: the npm and JSR trusted publishers check it.
+- npm publishes the `dist/` folder (`publishConfig.directory`); JSR publishes `src/` (`jsr.json`).

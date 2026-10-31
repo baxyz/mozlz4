@@ -1,0 +1,14 @@
+{
+  "name": "@baxyz/mozlz4",
+  "version": "0.2.4",
+  "license": "LGPL-3.0-or-later",
+  "exports": "./src/index.ts",
+  "publish": {
+    "include": [
+      "src",
+      "README.md",
+      "LICENSE",
+      "CHANGELOG.md"
+    ]
+  }
+}
