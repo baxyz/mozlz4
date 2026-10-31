@@ -40,6 +40,10 @@
   "module": "./dist/mozlz4.mjs",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
+  "publishConfig": {
+    "directory": "dist",
+    "linkDirectory": false
+  },
   "scripts": {
     "build": "vite build && tsc --project tsconfig.build.json --declaration --emitDeclarationOnly && node scripts/pack.mjs",
     "typecheck": "tsc --noEmit",
