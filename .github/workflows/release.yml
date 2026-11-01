@@ -33,6 +33,7 @@ jobs:
     uses: ./.github/workflows/ci.yml
     permissions:
       contents: read
+      pull-requests: write # ci.yml's pr-summary job asks for it (never runs here)
 
   release:
     needs: checks
