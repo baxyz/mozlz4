@@ -121,6 +121,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm bench 2>&1 | tee bench-results.txt
+        shell: bash # pipefail: a failing benchmark must fail the job
       - name: Upload bench results
         if: always()
         uses: actions/upload-artifact@v7
