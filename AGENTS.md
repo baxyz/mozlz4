@@ -15,7 +15,7 @@ proprietary ones), not a standalone application.
 
 ## Commit Scopes
 
-Defined in `scopes.json`: `core`, `build`, `test`, `bench`, `docs`, `deps`, `ci`.
+Defined in `scopes.json`: `core`, `build`, `test`, `bench`, `docs`, `deps`, `ci`, `ai`.
 
 ## Structure
 
